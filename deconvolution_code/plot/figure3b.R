@@ -68,7 +68,7 @@ plot_df$plot_value2 <- as.numeric(plot_df$plot_value)
 plot_df$plot_value <- as.factor(plot_df$plot_value)
 
 Main <- ggplot(plot_df, aes(x = variable, y = orig)) +
-  geom_tile(aes(fill = plot_value), color = "#F5F5F5", size = 0.1) +  # 使用新的 fill_value 列
+  geom_tile(aes(fill = plot_value), color = "#F5F5F5", size = 0.1) +  
   coord_equal() +  
   scale_fill_manual(values = c("-1"="#C1DCFF", "1"="#FFD8E8", "0.5" = "white","-0.5" = "white","0.8" = "white","0.3" = "#91C79A")) + 
   geom_text(aes(label = ifelse(abs(plot_value2) == 0.5, ifelse(plot_value2 > 0, "+", "-"), "")), color = 'black', size = 4) +  
