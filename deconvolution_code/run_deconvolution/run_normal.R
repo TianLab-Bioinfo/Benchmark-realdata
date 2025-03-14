@@ -5,7 +5,7 @@ results_path <- "~/DEC_benmark/TCGA/processed/benchmark_syq/new/COAD/GEO/normal/
 if (dir.exists(results_path)) {
   cat("Folder exist:", results_path, "\n")
 } else {
-  cat("Folder bot exist\n")
+  cat("Folder not exist")
   dir.create(results_path)
   cat("Folder has been created:", results_path, "\n")
 }
