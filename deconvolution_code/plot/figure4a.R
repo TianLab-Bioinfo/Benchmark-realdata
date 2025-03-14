@@ -38,17 +38,17 @@ order_df <- tt_plot[tt_plot$variable=='GEO',]
 df <- order_df %>%
   mutate(plot_value = factor(plot_value, levels = c(1, 0.5, -0.5, -1)))
 
-# 按照 plot_value 因子列排序
+
 df_sorted <- df %>%
   arrange(plot_value)
 celltype_order <- df_sorted[,'celltype']
 tt_plot$celltype <- factor(tt_plot$celltype,levels = celltype_order)
 
 main <-  ggplot(tt_plot, aes(x = celltype, y = dataset)) +
-  geom_tile(aes(fill = plot_value), color = "#F5F5F5", size = 0.1) +  # 使用新的 fill_value 列
-  coord_equal() +  # 绘制正方形，长宽相等  
-  scale_fill_manual(values = c("-1"="#C1DCFF", "1"="#FFD8E8", "0.5" = "white","-0.5" = "white","0" = "#91C79A")) +  # 自定义颜色映射
-  geom_text(aes(label = ifelse(abs(plot_value2) == 0.5, ifelse(plot_value2 > 0, "+", "-"), "")), color = 'black', size = 4) +  # 添加符号
+  geom_tile(aes(fill = plot_value), color = "#F5F5F5", size = 0.1) +  
+  coord_equal() +  
+  scale_fill_manual(values = c("-1"="#C1DCFF", "1"="#FFD8E8", "0.5" = "white","-0.5" = "white","0" = "#91C79A")) +  
+  geom_text(aes(label = ifelse(abs(plot_value2) == 0.5, ifelse(plot_value2 > 0, "+", "-"), "")), color = 'black', size = 4) +  
   theme(
     legend.position = 'none',
     axis.text.y = element_text(),
@@ -58,10 +58,10 @@ main <-  ggplot(tt_plot, aes(x = celltype, y = dataset)) +
   ) +
   guides(
     fill = guide_colorbar(
-      barwidth = 1,        # 图例条的宽度
-      barheight = 3,        # 图例条的高度
-      title.position = "top", # 标题位置
-      title.hjust = 0.5    # 标题水平对齐方式
+      barwidth = 1,        
+      barheight = 3,        
+      title.position = "top", 
+      title.hjust = 0.5    
     )
   )+annotate("rect", xmin = 0.5, xmax = length(unique(tt_plot$celltype)) + 0.5,
              ymin = 0.5, ymax = length(unique(tt_plot$methods))*2 + 0.5,
