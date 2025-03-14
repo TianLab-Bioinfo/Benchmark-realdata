@@ -2,7 +2,7 @@ setwd('example_dir')
 source('./code/plot/function_figure3b.R')
 ####################bulk2
 ER_files = sort(list.files('example_dir/COAD/GEO/normal/'))
-TNBC_files = sort(list.files('example_dir/COAD/GEO/tumor//'))
+TNBC_files = sort(list.files('example_dir/COAD/GEO/tumor/'))
 
 ER_dir = 'example_dir/COAD/GEO/normal/'
 TNBC_dir = 'example_dir/COAD/GEO/tumor/'
