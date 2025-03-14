@@ -52,7 +52,7 @@ ggplot(miss_data,aes(x = method,y = value,fill = method)) +
 
 miss_data$source <- ifelse(grepl("TCGA", miss_data$disease), "TCGA", "GEO")
 
-miss_data[,'method']=factor(miss_data[,'method'],levels=row.names(mean_values[order(mean_values$mean_value),]))##level和boxplot保持一致
+miss_data[,'method']=factor(miss_data[,'method'],levels=row.names(mean_values[order(mean_values$mean_value),]))
 miss_data$source <- factor(miss_data$source, levels = c("TCGA","GEO"))
 miss_data <- miss_data %>%
   arrange(source)
