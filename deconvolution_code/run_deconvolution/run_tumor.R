@@ -3,11 +3,11 @@ library(fastSave)
 
 results_path <- "~/DEC_benmark/TCGA/processed/benchmark_syq/new/COAD/GEO/tumor/"
 if (dir.exists(results_path)) {
-  cat("文件夹存在:", results_path, "\n")
+  cat("Folder exist:", results_path, "\n")
 } else {
-  cat("文件夹不存在\n")
+  cat("Folder not exist")
   dir.create(results_path)
-  cat("文件夹已创建:", results_path, "\n")
+  cat("Folder has been created:", results_path, "\n")
 }
 source("/home/lmh/ReCIDE_git/ReCIDE/R/ReCIDE_all_function_beta.R")
 
