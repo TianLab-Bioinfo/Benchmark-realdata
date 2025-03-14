@@ -1,4 +1,4 @@
-setwd('example_dir')  # 设置工作目录为示例目录
+setwd('example_dir')  
 source('./code/plot/function_figure3b.R')
 ####################bulk2
 ER_files = sort(list.files('example_dir/COAD/GEO/normal/'))
@@ -50,7 +50,7 @@ order_df[(order_df$value==2) ,'plot_value'] <- 0.8
 df <- order_df %>%
   mutate(plot_value = factor(plot_value, levels = c(1,0.5, -0.5, -1,0.3,0.8)))
 
-# 按照 plot_value 因子列排序
+
 df_sorted <- df %>%
   arrange(plot_value)
 celltype_order <- df_sorted[order(df_sorted$plot_value,df_sorted$value),'variable']
