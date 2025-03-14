@@ -85,7 +85,7 @@ legend_plot <- ggplot(miss_data, aes(x = disease, y = 1, fill = source)) +
   theme_void() +  
   theme(
     legend.position = "none",
-    plot.margin = unit(c(0, 0, -0.5, 0), "cm")  # 减少条栏和热图间距
+    plot.margin = unit(c(0, 0, -0.5, 0), "cm")  
   ) +
   scale_x_discrete(expand = expansion(mult = c(0.14, 0.14))) +
   coord_fixed(ratio = 0.6)  
@@ -95,7 +95,7 @@ final_plot <- plot_grid(legend_plot, heatmap_plot, ncol = 1, rel_heights = c(0.1
 
 heatmap_plot
 ggplot(miss_data,aes(x = method,y = value,fill = method)) +
-  geom_boxplot(aes(color = method),#这里的fill如果不设就是空心的
+  geom_boxplot(aes(color = method),
                width = .6, size = .7, alpha = .5, outlier.size = 1, ) +
   theme_classic() +
   scale_color_manual(values= vec_color) +
