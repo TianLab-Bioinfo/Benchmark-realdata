@@ -54,7 +54,7 @@ ggplot(miss_data,aes(x = Var1,y = value,fill = Var1)) +
   stat_summary(fun = mean, geom = "text", aes(label = round(..y.., 3)), vjust = -0.5, size = 3)
 
 
-# 绘制热图
+
 ggplot(miss_data, aes(x = Var2, y = Var1, fill = value)) +
   geom_tile(color = NA) +  # 去除内部单元格边框
   # '#7DB3D5'
@@ -67,10 +67,9 @@ ggplot(miss_data, aes(x = Var2, y = Var1, fill = value)) +
     axis.text.x = element_text(angle = 90, hjust = 1),
     axis.title.x = element_blank(),
     axis.title.y = element_blank(),
-    panel.grid = element_blank()  # 去除背景网格线
+    panel.grid = element_blank()  
   ) +
   coord_fixed(ratio =0.8)+
-  # 添加外部大框
   annotate("rect", xmin = 0.5, xmax = length(unique(miss_data$Var2)) + 0.5,
            ymin = 0.5, ymax = length(unique(miss_data$Var1)) + 0.5,
            color = "black", fill = NA, size = 0.7)
