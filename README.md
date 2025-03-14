@@ -1,7 +1,7 @@
 # Benchmark-realdata
 Evaluating Deconvolution Methods Using Real Bulk  RNA-expression Data for Robust Prognostic Insights in Pan-Cancer  
 
-![image](workflow.png)  
+![image](Figure1.png)  
 
 We provide the download links for all datasets here:
 
