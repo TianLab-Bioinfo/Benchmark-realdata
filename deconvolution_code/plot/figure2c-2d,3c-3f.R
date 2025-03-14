@@ -4,8 +4,7 @@ library(dplyr)
 library(cowplot)
 
 
-##Figure2-b
-##1.Prepare data
+
 melt_final_df <- readRDS("example_dir/melt_final_df_total.rds")##select final files under conservative or permissive criteria
 
 miss_data <- melt_final_df[melt_final_df$variable=='F1',]## select metrics 
@@ -50,7 +49,7 @@ ggplot(miss_data,aes(x = method,y = value,fill = method)) +
   coord_flip()
 
 
-# 转换因子顺序以确保热图的顺序
+
 miss_data$source <- ifelse(grepl("TCGA", miss_data$disease), "TCGA", "GEO")
 
 miss_data[,'method']=factor(miss_data[,'method'],levels=row.names(mean_values[order(mean_values$mean_value),]))##level和boxplot保持一致
@@ -60,7 +59,7 @@ miss_data <- miss_data %>%
 miss_data$disease <- factor(miss_data$disease, levels = unique(miss_data$disease))
 
 heatmap_plot <- ggplot(miss_data, aes(x = disease, y = method, fill = value)) +
-  geom_tile(color = NA) +  # 去除内部单元格边框
+  geom_tile(color = NA) +  
   scale_fill_gradientn(colors =c('white',"#fed486","#cc0000"), values = c(0, 0.5, 1), limits = c(0, 1)) +
   # labs(title = "Heatmap of Algorithm Values by Dataset", fill = "Value") +
   theme_minimal() +
@@ -70,16 +69,15 @@ heatmap_plot <- ggplot(miss_data, aes(x = disease, y = method, fill = value)) +
     axis.text.x = element_text(angle = 90, hjust = 1),
     axis.title.x = element_blank(),
     axis.title.y = element_blank(),
-    panel.grid = element_blank()  # 去除背景网格线
+    panel.grid = element_blank()  
   ) +
   coord_fixed(ratio = 1.3)+
-  # 添加外部大框
   annotate("rect", xmin = 0.5, xmax = length(unique(miss_data$disease)) + 0.5,
            ymin = 0.5, ymax = length(unique(miss_data$method)) + 0.5,
            color = "black", fill = NA, size = 0.7)
 
 
-# 绘制颜色条栏
+
 legend_plot <- ggplot(miss_data, aes(x = disease, y = 1, fill = source)) +
   geom_tile() +
   #scale_y_discrete(limits = unique(miss_data$disease))+
@@ -91,7 +89,7 @@ legend_plot <- ggplot(miss_data, aes(x = disease, y = 1, fill = source)) +
   ) +
   scale_x_discrete(expand = expansion(mult = c(0.14, 0.14))) +
   coord_fixed(ratio = 0.6)  
-# 使用 cowplot 将热图和条栏组合在一起
+
 final_plot <- plot_grid(legend_plot, heatmap_plot, ncol = 1, rel_heights = c(0.1, 1))
 
 
