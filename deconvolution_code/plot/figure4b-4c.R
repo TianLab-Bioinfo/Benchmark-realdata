@@ -27,7 +27,7 @@ miss_data[miss_data[,'rank']!=1,'significant'] <- FALSE
 
 vec_color <-mean_values[order(mean_values$mean_value),'color']
 ggplot(miss_data,aes(x = Var1,y = value,fill = Var1)) +
-  geom_bar(aes(color = Var1),#这里的fill如果不设就是空心的
+  geom_bar(aes(color = Var1),
            stat='summary', fun='mean') +
   theme_classic() +
   scale_color_manual(values= vec_color) +
@@ -56,7 +56,7 @@ ggplot(miss_data,aes(x = Var1,y = value,fill = Var1)) +
 
 
 ggplot(miss_data, aes(x = Var2, y = Var1, fill = value)) +
-  geom_tile(color = NA) +  # 去除内部单元格边框
+  geom_tile(color = NA) +  
   # '#7DB3D5'
   scale_fill_gradientn(colors =c('white',"#fed486","#cc0000"), values = c(0, 0.5, 1), limits = c(0, 1)) +
   # labs(title = "Heatmap of Algorithm Values by Dataset", fill = "Value") +
