@@ -105,10 +105,10 @@ trend_plot <- function(ER_files,ER_dir,TNBC_dir,key_trend,disease){
   }
   
   remove_zero_columns <- function(df) {
-    # 找出所有非零的列
+    
     non_zero_cols <- sapply(df, function(col) any(col != 0, na.rm = TRUE))
     
-    # 只保留那些非零的列
+    
     df=df[, non_zero_cols, drop = FALSE]
     return(df)
   }
