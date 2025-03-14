@@ -160,7 +160,7 @@ trend_plot <- function(ER_files,ER_dir,TNBC_dir,key_trend,disease){
       } else if (median(df_category1_in) > median(df_category2_in)) {
         trends[j] <- '-'
       } else {
-        trends[j] <- '0'  # ?????????????????????
+        trends[j] <- '0'  
       }
     }
     
