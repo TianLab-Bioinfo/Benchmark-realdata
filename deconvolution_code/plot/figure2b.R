@@ -1,4 +1,4 @@
-setwd('example_dir')  # 设置工作目录为示例目录
+setwd('example_dir')  
 source('./code/plot/function_figure2b.R')
 
 scRNA_list <- readRDS('./scRNA_list.rds')
@@ -40,10 +40,10 @@ p <- ggplot(plot_df_melt,aes(x=celltype,y=method,fill=trend))+
   theme(legend.position = 'none',axis.title.x = element_blank(),axis.title.y =element_blank(),axis.text.x =element_text(angle =315,hjust =0.5,vjust = 0.5))+
   guides(
     fill = guide_colorbar(
-      barwidth = 1,        # 图例条的宽度
-      barheight = 3,        # 图例条的高度
-      title.position = "top", # 标题位置
-      title.hjust = 0.5    # 标题水平对齐方式
+      barwidth = 1,        
+      barheight = 3,        
+      title.position = "top", 
+      title.hjust = 0.5   
       
     ))+coord_fixed(ratio = 1)+
   annotate("rect", xmin = 0.5, xmax = length(unique(plot_df_melt$celltype)) + 0.5,
