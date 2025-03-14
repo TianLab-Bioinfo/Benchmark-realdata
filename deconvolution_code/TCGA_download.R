@@ -2,10 +2,9 @@ library(dplyr)
 library(SingleCellExperiment)
 
 
-# 查看TCGA中33种癌症的简称
 library(TCGAbiolinks)
 
-projects <- TCGAbiolinks::getGDCprojects()$project_id ##获取癌症名字
+projects <- TCGAbiolinks::getGDCprojects()$project_id 
 projects <- projects[grepl('^TCGA', projects, perl=TRUE)]
 
 setwd('./dir_for_TCGA_data/')
@@ -17,7 +16,6 @@ for (i in projects){
 
 
 for (j  in projects){
-  ###表达数据下载
   query <- GDCquery(
     project = j,
     data.category = "Transcriptome Profiling",
