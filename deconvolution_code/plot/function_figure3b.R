@@ -28,14 +28,6 @@ trend_plot <- function(ER_files,ER_dir,TNBC_dir,key_trend,disease){
       
     }
     
-    if(ER_files[i] == "results_ReCIDE.rds"){
-      ReCIDE_ER = as.data.frame(readRDS(paste0(ER_dir,"results_ReCIDE.rds"))[2])
-      ReCIDE_TNBC = as.data.frame(readRDS(paste0(TNBC_dir,"results_ReCIDE.rds"))[2])
-      
-      results_list[['ReCIDE']] = list(ReCIDE_ER,ReCIDE_TNBC)
-      
-    }
-    
     if(ER_files[i] == "results_bayes.rds"){
       bayes_ER = as.data.frame(t(readRDS(paste0(ER_dir,"results_bayes.rds"))))
       bayes_TNBC = as.data.frame(t(readRDS(paste0(TNBC_dir,"results_bayes.rds"))))
@@ -105,7 +97,7 @@ trend_plot <- function(ER_files,ER_dir,TNBC_dir,key_trend,disease){
   }
   
   remove_zero_columns <- function(df) {
-   
+    
     non_zero_cols <- sapply(df, function(col) any(col != 0, na.rm = TRUE))
     df=df[, non_zero_cols, drop = FALSE]
     return(df)
@@ -154,13 +146,15 @@ trend_plot <- function(ER_files,ER_dir,TNBC_dir,key_trend,disease){
       
       
       if (median(df_category1_in) < median(df_category2_in)) {
-        trends[j] <- '+'  ##normal smaller than tumor,tumor high
+        trends[j] <- '+'  
       } else if (median(df_category1_in) > median(df_category2_in)) {
         trends[j] <- '-'
       } else {
         trends[j] <- '0'  
       }
     }
+    
+    adjusted_p_values <- p.adjust(p_values, method = "fdr")
     
     re_df <- data.frame(
       Celltype = colnames(df_category1),
@@ -176,7 +170,67 @@ trend_plot <- function(ER_files,ER_dir,TNBC_dir,key_trend,disease){
       RE_DF <- rbind(RE_DF,re_df)}
   }
   
+  ReCIDE_list=list()
+  ReCIDE_list[[1]]=readRDS(paste0(ER_dir,"results_ReCIDE.rds"))[["results_final_df"]] %>% data.frame()
+  ReCIDE_list[[2]]=readRDS(paste0(TNBC_dir,"results_ReCIDE.rds"))[["results_final_df"]] %>% data.frame()
+  if (disease_type =='PRAD'){
+    produce_Epi <- function(df){
+      name=c("Tumor","Epitheial_Basal","Epitheial_Club","Epitheial_Hillock","Epitheial_Luminal")
+      df['Epithelium',] <- apply(df[intersect(name,row.names(df)),],2,sum)
+      return(df)
+    }
+    ReCIDE_list <-  lapply(ReCIDE_list, produce_Epi)}
+  if (disease_type=='PAAD'){
+    produce_Epi <- function(df){
+      name=c('Acinar','EMT.Duct','HSP.Duct','Metaplastic','Neoplastic','Normal.Duct')
+      df['Epithelium',] <- apply(df[intersect(name,row.names(df)),],2,sum)
+      return(df)
+    }
+    ReCIDE_list <-  lapply(ReCIDE_list, produce_Epi)}
   
+  values_to_keep <-row.names(key_trend)
+  
+  normalize_df <- function(df){
+    df_normalized <- df
+    for (i in 1:ncol(df)) {
+      row_sum <- sum(df[,i ], na.rm = TRUE)
+      if (row_sum != 0) {
+        df_normalized[,i ] <- df[,i ] / row_sum
+      } else {
+        df_normalized[,i ] <- 0  
+      }
+    }
+    
+    return(df_normalized)
+  }
+  
+  
+  
+  keep_rows_with_values <- function(df) {
+    df=df[row.names(df) %in% values_to_keep, ]
+    return(df)
+  }
+  
+  remove_zero_columns <- function(df) {
+    
+    non_zero_cols <- sapply(df, function(col) any(col != 0, na.rm = TRUE))
+    
+    
+    df=df[, non_zero_cols, drop = FALSE]
+    return(df)
+  }
+  
+  
+  
+  ReCIDE_list <- lapply(ReCIDE_list, keep_rows_with_values)
+  ReCIDE_list <- lapply(ReCIDE_list, normalize_df)
+  
+  compare_group_proportion(ReCIDE_list,dir_diff_celltype_output)
+  re_df=readRDS(dir_diff_celltype_output)
+  re_df[,'orig']='ReCIDE'
+  RE_DF <- rbind(RE_DF,re_df)
+  
+  ##
   RE_DF[is.na(RE_DF[,2]),2] = 1
   
   RE_DF[RE_DF$Trend=='-','adj_pvalue'] <- 0- RE_DF[RE_DF$Trend=='-','PValue']
@@ -201,7 +255,7 @@ trend_plot <- function(ER_files,ER_dir,TNBC_dir,key_trend,disease){
   for (methods in c("CIBERSORT","DWLS","ReCIDE","bayes","bisque","music")) {
     RE_DF_in = RE_DF[RE_DF[,'orig'] == methods,]
     for (mm in 1:nrow(RE_DF_in)) {
-
+      
       RE_DF_in[mm, 'category'] <- case_when(
         is.na(RE_DF_in[mm, 'Trend']) | is.na(RE_DF_in[mm, 'PValue']) ~ NA_character_,
         RE_DF_in[mm, 'Trend'] == '-' & RE_DF_in[mm, 'PValue'] < 0.05 ~ 'down',
